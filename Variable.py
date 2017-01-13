@@ -2,10 +2,19 @@ class Variable():
 
     Variable.wengert = []
 
-    def __init__(self, val):
+    def __init__(self, c=[], eval_=None):
+        self.components = c
+        self.index = len(Variable.wengert)
+
+        if eval_ == None:
+            self.eval_ = lambda *values: values[self.index]
+        else:
+            self.eval_ = eval_
+
         Variable.wengert.append(self)
 
     def __add__(self, other):
+
 
     def __radd__(self, other):
 
