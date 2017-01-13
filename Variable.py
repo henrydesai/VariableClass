@@ -1,12 +1,13 @@
 class Variable():
+
+    Variable.wengert = []
+
     def __init__(self, val):
-        self.val = val
+        Variable.wengert.append(self)
 
     def __add__(self, other):
-        return Variable(self.val + other.val)
 
     def __radd__(self, other):
-        return Variable(self.val + other.val)
 
     def __sub__(self, other):
 
