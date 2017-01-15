@@ -31,18 +31,74 @@ class Variable:
 
         return self.__add__(other)
 
-    #def __sub__(self, other):
+    def __sub__(self, other):
 
-    #def __rsub__(self, other):
+        if isinstance(other, (int, float)):
+            return Variable(c=[self],
+                            eval_=lambda *values: self.eval_(*values) - other)
+        elif isinstance(other, Variable):
+            return Variable(c=[self, other],
+                            eval_=lambda *values: self.eval_(*values) - other.eval_(*values))
+        else:
+            return NotImplemented
 
-    #def __mul__(self, other):
+    def __rsub__(self, other):
 
-    #def __rmul__(self, other):
+        if isinstance(other, (int, float)):
+            return Variable(c=[self],
+                            eval_=lambda *values: other - self.eval_(*values))
+        else:
+            return NotImplemented
 
-    #def __div__(self, other):
+    def __mul__(self, other):
 
-    #def __rdiv__(self, other):
+        if isinstance(other, (int, float)):
+            return Variable(c=[self],
+                            eval_=lambda *values: self.eval_(*values) * other)
+        elif isinstance(other, Variable):
+            return Variable(c=[self, other],
+                            eval_=lambda *values: self.eval_(*values) * other.eval_(*values))
+        else:
+            return NotImplemented
 
-    #def __pow__(self, other):
+    def __rmul__(self, other):
 
-    #def __rpow__(self, other):
+        return self.__mul__(other)
+
+    def __div__(self, other):
+
+        if isinstance(other, (int, float)):
+            return Variable(c=[self],
+                            eval_=lambda *values: self.eval_(*values) / other)
+        elif isinstance(other, Variable):
+            return Variable(c=[self, other],
+                            eval_=lambda *values: self.eval_(*values) / other.eval_(*values))
+        else:
+            return NotImplemented
+
+    def __rdiv__(self, other):
+
+        if isinstance(other, (int, float)):
+            return Variable(c=[self],
+                            eval_=lambda *values: other / self.eval_(*values))
+        else:
+            return NotImplemented
+
+    def __pow__(self, other):
+
+        if isinstance(other, (int, float)):
+            return Variable(c=[self],
+                            eval_=lambda *values: self.eval_(*values) ** other)
+        elif isinstance(other, Variable):
+            return Variable(c=[self, other],
+                            eval_=lambda *values: self.eval_(*values) ** other.eval_(*values))
+        else:
+            return NotImplemented
+
+    def __rpow__(self, other):
+
+        if isinstance(other, (int, float)):
+            return Variable(c=[self],
+                            eval_=lambda *values: other ** self.eval_(*values))
+        else:
+            return NotImplemented
