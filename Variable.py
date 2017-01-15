@@ -26,6 +26,8 @@ class Variable():
 
     def __radd__(self, other):
 
+        return self.__add__(other)
+
     def __sub__(self, other):
 
     def __rsub__(self, other):
