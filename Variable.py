@@ -1,6 +1,6 @@
 class Variable():
 
-    Variable.wengert = []
+    wengert = []
 
     def __init__(self, c=[], eval_=None):
         self.components = c
