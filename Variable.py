@@ -13,6 +13,9 @@ class Variable:
 
         Variable.wengert.append(self)
 
+    def __call__(self, *values):
+        return self.eval_(*values)
+
     def __add__(self, other):
 
         if isinstance(other, (int, float)):
