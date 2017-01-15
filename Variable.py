@@ -15,6 +15,14 @@ class Variable():
 
     def __add__(self, other):
 
+        if isinstance(other, (int, float)):
+            return Variable(c=[self],
+                            eval_=lambda *values: other + self.eval_(*values))
+        elif isinstance(other, Variable):
+            return Variable(c=[self, other],
+                            eval_=lambda *values: self.eval_(*values) + other.eval_(*values))
+        else:
+            return NotImplemented
 
     def __radd__(self, other):
 
