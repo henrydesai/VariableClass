@@ -1,3 +1,5 @@
+import numpy as np
+
 class Variable:
 
     wengert = []
@@ -8,7 +10,7 @@ class Variable:
 
         if eval_ == None: #if eval_ is None, then so is grad_
             self.eval_ = lambda *values: values[self.index]
-            self.grad_ = lambda *values: [1 if i==self.index else 0 for i in range(len(wengert))]
+            self.grad_ = lambda *values: np.array([1 if i==self.index else 0 for i in range(len(Variable.wengert))])
         else:
             self.eval_ = eval_
             self.grad_ = grad_
