@@ -23,12 +23,15 @@ class Variable:
     def __repr__(self, depth=0):
         s=""
         for i in range(depth):
-            s += " "
+            s += "| "
         s += "W" + str(self.index) + "\n"
         for c in self.components:
             s += c.__repr__(depth=depth+1)
 
         return s
+
+    def clear_wengert():
+        Variable.wengert = []
 
     def __add__(self, other):
 
@@ -116,16 +119,13 @@ class Variable:
             return Variable(c=[self],
                             eval_=lambda *values: self.eval_(*values) ** other,
                             grad_=lambda *values: (other*self.eval_(*values)**(other-1) * self.grad_(*values)))
-        #elif isinstance(other, Variable):
-        #    return Variable(c=[self, other],
-        #                    eval_=lambda *values: self.eval_(*values) ** other.eval_(*values))
         else:
             return NotImplemented
 
-    '''def __Math.exp__(self, other):
-
+    def __rpow__(self, other):
         if other == np.e:
             return Variable(c=[self],
-                            eval_=lambda *values: other ** self.eval_(*values))
+                            eval_=lambda *values: np.e ** self.eval_(*values),
+                            grad_=lambda *values: np.e ** self.eval_(*values) * self.grad_(*values))
         else:
-            return NotImplemented'''
+            return NotImplemented
