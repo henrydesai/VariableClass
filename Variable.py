@@ -4,9 +4,10 @@ class Variable:
 
     wengert = []
 
-    def __init__(self, c=[], eval_=None, grad_=None):
+    def __init__(self, c=[], eval_=None, grad_=None, op="No Operation"):
         self.components = c
         self.index = len(Variable.wengert)
+        self.op = op
 
         if eval_ == None: #if eval_ is None, then so is grad_
             self.eval_ = lambda *values: values[self.index]
@@ -24,7 +25,7 @@ class Variable:
         s=""
         for i in range(depth):
             s += "| "
-        s += "W" + str(self.index) + "\n"
+        s += "W" + str(self.index) + ": " + self.op + "\n"
         for c in self.components:
             s += c.__repr__(depth=depth+1)
 
@@ -38,11 +39,11 @@ class Variable:
         if isinstance(other, (int, float)):
             return Variable(c=[self],
                             eval_=lambda *values: other + self.eval_(*values),
-                            grad_=lambda *values: self.grad_(*values))
+                            grad_=lambda *values: self.grad_(*values), op="+")
         elif isinstance(other, Variable):
             return Variable(c=[self, other],
                             eval_=lambda *values: self.eval_(*values) + other.eval_(*values),
-                            grad_=lambda *values: self.grad_(*values) + other.grad_(*values))
+                            grad_=lambda *values: self.grad_(*values) + other.grad_(*values), op="+")
         else:
             return NotImplemented
 
@@ -55,11 +56,11 @@ class Variable:
         if isinstance(other, (int, float)):
             return Variable(c=[self],
                             eval_=lambda *values: self.eval_(*values) - other,
-                            grad_=lambda *values: self.grad_(*values))
+                            grad_=lambda *values: self.grad_(*values), op="-")
         elif isinstance(other, Variable):
             return Variable(c=[self, other],
                             eval_=lambda *values: self.eval_(*values) - other.eval_(*values),
-                            grad_=lambda *values: self.grad_(*values) - other.grad_(*values))
+                            grad_=lambda *values: self.grad_(*values) - other.grad_(*values), op="-")
         else:
             return NotImplemented
 
@@ -68,7 +69,7 @@ class Variable:
         if isinstance(other, (int, float)):
             return Variable(c=[self],
                             eval_=lambda *values: other - self.eval_(*values),
-                            grad_=lambda *values: 0-self.grad_(*values))
+                            grad_=lambda *values: 0-self.grad_(*values), op="-")
         else:
             return NotImplemented
 
@@ -77,12 +78,12 @@ class Variable:
         if isinstance(other, (int, float)):
             return Variable(c=[self],
                             eval_=lambda *values: self.eval_(*values) * other,
-                            grad_=lambda *values: other * self.grad_(*values))
+                            grad_=lambda *values: other * self.grad_(*values),op="*")
         elif isinstance(other, Variable):
             return Variable(c=[self, other],
                             eval_=lambda *values: self.eval_(*values) * other.eval_(*values),
                             grad_=lambda *values: self.grad_(*values) * other.eval_(*values) +
-                            self.eval_(*values) * other.grad_(*values))
+                            self.eval_(*values) * other.grad_(*values),op="*")
         else:
             return NotImplemented
 
@@ -95,12 +96,12 @@ class Variable:
         if isinstance(other, (int, float)):
             return Variable(c=[self],
                             eval_=lambda *values: self.eval_(*values) / other,
-                            grad_=lambda *values: self.grad_(*values) / other)
+                            grad_=lambda *values: self.grad_(*values) / other, op="/")
         elif isinstance(other, Variable):
             return Variable(c=[self, other],
                             eval_=lambda *values: self.eval_(*values) / other.eval_(*values),
                             grad_=lambda *values: (self.grad_(*values) * other.eval_(*values) -
-                            other.grad_(*values) * self.eval_(*values)) / other.eval(*values) ** 2)
+                            other.grad_(*values) * self.eval_(*values)) / other.eval(*values) ** 2, op="/")
         else:
             return NotImplemented
 
@@ -109,7 +110,7 @@ class Variable:
         if isinstance(other, (int, float)):
             return Variable(c=[self],
                             eval_=lambda *values: other / self.eval_(*values),
-                            grad_=lambda *values: (0-other.eval_(*values) / (self.eval_(*values)**2))*self.grad_(*values))
+                            grad_=lambda *values: (0-other.eval_(*values) / (self.eval_(*values)**2))*self.grad_(*values), op="/")
         else:
             return NotImplemented
 
@@ -118,7 +119,7 @@ class Variable:
         if isinstance(other, (int, float)):
             return Variable(c=[self],
                             eval_=lambda *values: self.eval_(*values) ** other,
-                            grad_=lambda *values: (other*self.eval_(*values)**(other-1) * self.grad_(*values)))
+                            grad_=lambda *values: (other*self.eval_(*values)**(other-1) * self.grad_(*values)), op="**")
         else:
             return NotImplemented
 
@@ -126,6 +127,6 @@ class Variable:
         if other == np.e:
             return Variable(c=[self],
                             eval_=lambda *values: np.e ** self.eval_(*values),
-                            grad_=lambda *values: np.e ** self.eval_(*values) * self.grad_(*values))
+                            grad_=lambda *values: np.e ** self.eval_(*values) * self.grad_(*values), op="**")
         else:
             return NotImplemented
