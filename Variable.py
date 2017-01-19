@@ -12,11 +12,12 @@ class Variable:
         if eval_ == None: #if eval_ is None, then so is grad_
             self.eval_ = lambda *values: values[self.index]
             self.grad_ = lambda *values: np.array([1 if i==self.index else 0 for i in range(len(Variable.wengert))])
+            Variable.wengert.append(self)
         else:
             self.eval_ = eval_
             self.grad_ = grad_
 
-        Variable.wengert.append(self)
+
 
     def __call__(self, *values):
         return self.eval_(*values)
@@ -130,3 +131,8 @@ class Variable:
                             grad_=lambda *values: np.e ** self.eval_(*values) * self.grad_(*values), op="**")
         else:
             return NotImplemented
+
+    def ln(self):
+        return Variable(c=[self],
+                        eval_=lambda *values: np.log(self.eval_(*values)),
+                        grad_=lambda *values 1/self.eval_(*values) * self.grad_(*values), op="ln")
