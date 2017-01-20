@@ -7,14 +7,13 @@ Teacher: Dr. Z
 import numpy as np
 import matplotlib.pyplot as plt
 from VariableClass.Variable import Variable
-from sklearn.metrics import accuracy_score
 
 class LogisticRegression:
 
     def __init__(self):
         return
 
-    # Set verbose to true if you wish to plot the accuracy score over time.
+    # Set verbose to true if you wish to plot the cost over time.
     def fit(self, X, y, ss=1, verbose=False):
         Variable.clear_wengert()
         self.X = X
@@ -22,25 +21,22 @@ class LogisticRegression:
         cost = self.make_cost_function()
 
         if verbose:
-            accuracies = []
+            costs = []
         # Starting points
         pos = np.random.rand(len(X[0])+1)*10
 
         for i in range(100):
             grad = cost.grad_(*pos)
             pos = pos - grad * ss #ss is the hyper-parameter stepsize
-            if verbose and i % 10 == 0:
-                self.slopes = pos[:-1]
-                self.b = pos[-1]
-                y_preds = self.predict(X)
-                accuracies.append(accuracy_score(y, y_preds))
+            if verbose:
+                costs.append(cost(*pos))
 
         self.slopes = pos[:-1]
         self.b = pos[-1]
 
         if verbose:
-            plt.plot(np.linspace(0, 90, num=10), accuracies, 'ro')
-            plt.axis([0, 90, 0, 1])
+            plt.plot(np.linspace(0, 99, num=100), costs, 'ro')
+            plt.axis([0, 90, min(costs), max(costs)])
             plt.show()
 
     def predict(self, X):
