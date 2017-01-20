@@ -21,6 +21,19 @@ class LogisticRegression:
         self.slopes = pos[:-1]
         self.b = pos[-1]
 
+    def predict(self, X):
+        preds = []
+        for point in X:
+            exponent = self.b
+            for i in range(len(point)):
+                exponent += point[i] * self.slopes[i]
+            pred = 1/(1 + np.e**(-exponent))
+            if pred >= 0.5:
+                preds.append(1)
+            else:
+                preds.append(0)
+        return preds
+
     def make_cost_function(self):
 
         vars_ = []
