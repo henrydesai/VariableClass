@@ -113,7 +113,7 @@ class Variable:
             return Variable(c=[self, other],
                             eval_=lambda *values: self.eval_(*values) / other.eval_(*values),
                             grad_=lambda *values: (self.grad_(*values) * other.eval_(*values) -
-                            other.grad_(*values) * self.eval_(*values)) / other.eval(*values) ** 2, op="/")
+                            other.grad_(*values) * self.eval_(*values)) / other.eval_(*values) ** 2, op="/")
         else:
             return NotImplemented
 
