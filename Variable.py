@@ -11,7 +11,7 @@ class Variable:
         self.op = op
 
         if eval_ == None: #if eval_ is None, then so is grad_
-            self.eval_ = lambda *values: values[self.index]
+            self.eval_ = lambda values: values[self.index]
             self.grad_ = lambda *values: np.array([1 if i==self.index else 0 for i in range(len(Variable.wengert))])
             Variable.wengert.append(self)
         else:
@@ -96,7 +96,7 @@ class Variable:
 
         return self.__mul__(other)
 
-    def __div__(self, other):
+    def __truediv__(self, other):
 
         if isinstance(other, (int, float)):
             return Variable(c=[self],
@@ -110,12 +110,12 @@ class Variable:
         else:
             return NotImplemented
 
-    def __rdiv__(self, other):
+    def __rtruediv__(self, other):
 
         if isinstance(other, (int, float)):
             return Variable(c=[self],
                             eval_=lambda *values: other / self.eval_(*values),
-                            grad_=lambda *values: (0-other.eval_(*values) / (self.eval_(*values)**2))*self.grad_(*values), op="/")
+                            grad_=lambda *values: (0-other / (self.eval_(*values)**2))*self.grad_(*values), op="/")
         else:
             return NotImplemented
 
