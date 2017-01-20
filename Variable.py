@@ -37,6 +37,7 @@ class Variable:
 
     def clear_wengert():
         Variable.wengert = []
+        Variable.all_wengert = []
 
     def __add__(self, other):
 
@@ -138,4 +139,4 @@ class Variable:
     def ln(self):
         return Variable(c=[self],
                         eval_=lambda *values: np.log(self.eval_(*values)),
-                        grad_=lambda *values 1/self.eval_(*values) * self.grad_(*values), op="ln")
+                        grad_=lambda *values: 1/(self.eval_(*values)) * self.grad_(*values), op="ln")
