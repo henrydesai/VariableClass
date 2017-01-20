@@ -35,8 +35,8 @@ class LogisticRegression:
         self.b = pos[-1]
 
         if verbose:
-            plt.plot(np.linspace(0, 99, num=100), costs, 'ro')
-            plt.axis([0, 90, min(costs), max(costs)])
+            plt.plot(np.linspace(0, epochs, num=epochs), costs, 'ro')
+            plt.axis([0, epochs, min(costs), max(costs)])
             plt.show()
 
     def predict(self, X):
