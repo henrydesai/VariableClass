@@ -1,27 +1,47 @@
+'''
+Group Names: Lior Hirschfeld, Henry Desai, Pham Nhat, and Jihoun Im
+Class: Compsci 630 Machine Learning
+Teacher: Dr. Z
+'''
+
 import numpy as np
+import matplotlib.pyplot as plt
 from VariableClass.Variable import Variable
+from sklearn.metrics import accuracy_score
 
 class LogisticRegression:
 
     def __init__(self):
         return
 
-    def fit(self, X, y, ss=1):
+    # Set verbose to true if you wish to plot the accuracy score over time.
+    def fit(self, X, y, ss=1, verbose=False):
         Variable.clear_wengert()
         self.X = X
         self.y = y
         cost = self.make_cost_function()
 
+        if verbose:
+            accuracies = []
         # Starting points
-        pos = [1, 1]#np.random.rand(len(X[0])+1)*100
+        pos = np.random.rand(len(X[0])+1)*10
 
         for i in range(100):
             grad = cost.grad_(*pos)
-            pos = pos - grad * ss
-
+            pos = pos - grad * ss #ss is the hyper-parameter stepsize
+            if verbose and i % 10 == 0:
+                self.slopes = pos[:-1]
+                self.b = pos[-1]
+                y_preds = self.predict(X)
+                accuracies.append(accuracy_score(y, y_preds))
 
         self.slopes = pos[:-1]
         self.b = pos[-1]
+
+        if verbose:
+            plt.plot(np.linspace(0, 90, num=10), accuracies, 'ro')
+            plt.axis([0, 90, 0, 1])
+            plt.show()
 
     def predict(self, X):
         preds = []
@@ -38,11 +58,11 @@ class LogisticRegression:
 
     def make_cost_function(self):
 
-        vars_ = []
+        vars_ = [] #list of all the m values from 1/(1+e^(-(mx + b)))
         for _ in range(len(self.X[0]) + 1):
             vars_.append(Variable())
 
-        hats = []
+        hats = [] #computes all y-hat values and appends them to list hats
         for i in range(len(self.X)):
             temp = vars_[len(vars_) - 1]
             for j in range(len(self.X[i])):
@@ -54,7 +74,7 @@ class LogisticRegression:
             temp = 1 / temp
             hats.append(temp)
 
-        terms = []
+        terms = [] #creates the cost function and apppends them to terms
         for i in range(len(hats)):
             temp = hats[i].ln()
             temp = temp * self.y[i]
@@ -63,6 +83,7 @@ class LogisticRegression:
             temp2 = temp2 * (1-self.y[i])
             terms.append(temp + temp2)
 
+        #takes the average of all the cost functions
         temp = 0
         for i in range(len(terms)):
             temp = temp + terms[i]

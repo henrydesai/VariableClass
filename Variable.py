@@ -1,13 +1,19 @@
+'''
+Group Names: Lior Hirschfeld, Henry Desai, Pham Nhat, and Jihoun Im
+Class: Compsci 630 Machine Learning
+Teacher: Dr. Z
+'''
+
 import numpy as np
 
 class Variable:
 
-    wengert = []
+    wengert = [] #created two different wengert lists. One stores all variables and the other stores "root" variables.
     all_wengert = []
 
     def __init__(self, c=[], eval_=None, grad_=None, op="No Operation"):
         self.components = c
-        self.op = op
+        self.op = op #stores the operand as a string to be printed out in repr
         self.index = len(Variable.all_wengert)
 
         if eval_ == None: #if eval_ is None, then so is grad_
@@ -32,7 +38,7 @@ class Variable:
             s += "| "
         s += "W" + str(self.index) + ": " + self.op + "\n"
         for c in self.components:
-            s += c.__repr__(depth=depth+1)
+            s += c.__repr__(depth=depth+1) #Used recursion to print out all children variables and their operands
 
         return s
 
