@@ -6,20 +6,20 @@ class LogisticRegression:
     def __init__(self):
         return
 
-    def fit(self, X, y, c=1):
+    def fit(self, X, y, ss=1):
         Variable.clear_wengert()
         self.X = X
         self.y = y
         cost = self.make_cost_function()
 
         # Starting points
-        pos = np.random.rand(len(X[0])+1)
+        pos = np.random.rand(len(X[0])+1)*100
         print("pos", pos)
 
         for i in range(100):
             grad = cost.grad_(pos)
             print("grad", grad)
-            pos = pos - grad * c
+            pos = pos - grad * ss
 
         print("pos2", pos)
 
