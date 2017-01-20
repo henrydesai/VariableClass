@@ -13,7 +13,6 @@ class Variable:
         if eval_ == None: #if eval_ is None, then so is grad_
             self.trueIndex = len(Variable.wengert)
             Variable.wengert.append(self)
-            print(self.index)
             self.eval_ = lambda *values: values[self.trueIndex]
             self.grad_ = lambda *values: np.array([1 if i==self.index else 0 for i in range(len(Variable.wengert))])
         else:

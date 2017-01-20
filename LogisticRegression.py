@@ -13,15 +13,12 @@ class LogisticRegression:
         cost = self.make_cost_function()
 
         # Starting points
-        pos = np.random.rand(len(X[0])+1)*100
-        print("pos", pos)
+        pos = [1, 1]#np.random.rand(len(X[0])+1)*100
 
         for i in range(100):
-            grad = cost.grad_(pos)
-            print("grad", grad)
+            grad = cost.grad_(*pos)
             pos = pos - grad * ss
 
-        print("pos2", pos)
 
         self.slopes = pos[:-1]
         self.b = pos[-1]
@@ -30,12 +27,9 @@ class LogisticRegression:
         preds = []
         for point in X:
             exponent = self.b
-            print("b", self.b)
             for i in range(len(point)):
                 exponent += point[i] * self.slopes[i]
             pred = 1/(1 + np.e**(-exponent))
-            print("exp:", exponent)
-            print("pred", pred)
             if pred >= 0.5:
                 preds.append(1)
             else:
@@ -56,7 +50,7 @@ class LogisticRegression:
                 temp = temp + prod
             temp = -1 * temp
             temp = np.e**temp
-            temp = temp + 1
+            temp = temp + 1.01 # Prevents divide by zero errors.
             temp = 1 / temp
             hats.append(temp)
 
@@ -73,4 +67,4 @@ class LogisticRegression:
         for i in range(len(terms)):
             temp = temp + terms[i]
 
-        return temp/len(self.y)
+        return temp/(-len(self.y))
