@@ -3,10 +3,11 @@ import numpy as np
 class Variable:
 
     wengert = []
+    all_wengert = []
 
     def __init__(self, c=[], eval_=None, grad_=None, op="No Operation"):
         self.components = c
-        self.index = len(Variable.wengert)
+        self.index = len(Variable.all_wengert)
         self.op = op
 
         if eval_ == None: #if eval_ is None, then so is grad_
@@ -16,6 +17,8 @@ class Variable:
         else:
             self.eval_ = eval_
             self.grad_ = grad_
+
+        Variable.all_wengert.append(self)
 
 
 
