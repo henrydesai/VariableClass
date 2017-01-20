@@ -3,17 +3,25 @@ import numpy as np
 class LogisticRegression:
 
     def __init__(self):
+        return
 
-
-    def get_grad(self, X, y):
-
-    def fit(self, X, y):
-
+    def fit(self, X, y, c=1):
+        Variable.clear_wengert()
         self.X = X
         self.y = y
+        cost = self.make_cost_function()
 
+        # Starting points
+        pos = np.random.rand(len(X[0])+1)
 
-    def  make_cost_function(self):
+        for i in range(100):
+            grad = cost.grad_(pos)
+            pos = pos - grad * c
+
+        self.slopes = pos[:-1]
+        self.b = pos[-1]
+
+    def make_cost_function(self):
 
         vars_ = []
         for _ in range(len(slopes) + 1):
@@ -38,3 +46,9 @@ class LogisticRegression:
             temp2 = temp2.ln()
             temp2 = temp2 * (1-y[i])
             terms.append(temp + temp2)
+
+        temp = 0
+        for i in range(len(terms)):
+            temp = temp + terms[i]
+
+        return temp/len(y)
