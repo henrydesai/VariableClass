@@ -14,7 +14,7 @@ class LogisticRegression:
         return
 
     # Set verbose to true if you wish to plot the cost over time.
-    def fit(self, X, y, ss=1, verbose=False):
+    def fit(self, X, y, ss=1, epochs=100, verbose=False):
         Variable.clear_wengert()
         self.X = X
         self.y = y
@@ -25,7 +25,7 @@ class LogisticRegression:
         # Starting points
         pos = np.random.rand(len(X[0])+1)*10
 
-        for i in range(100):
+        for i in range(epochs):
             grad = cost.grad_(*pos)
             pos = pos - grad * ss #ss is the hyper-parameter stepsize
             if verbose:
